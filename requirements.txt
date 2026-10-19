@@ -1,0 +1,7 @@
+requests
+pandas
+numpy
+feedparser
+scikit-learn
+yfinance
+streamlit
