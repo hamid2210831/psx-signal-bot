@@ -1,0 +1,20 @@
+name: PSX signals
+on:
+  schedule:
+    - cron: "30 4 * * 1-5"   # 09:30 PKT, before/at market open
+    - cron: "30 9 * * 1-5"   # 14:30 PKT, afternoon update
+  workflow_dispatch: {}
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install -r requirements.txt
+      - run: python psx_bot.py --top 5
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+      - uses: actions/upload-artifact@v4
+        with: { name: signals, path: "psx_signals.*" }
